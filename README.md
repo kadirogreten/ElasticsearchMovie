@@ -100,6 +100,42 @@ The names of the databases will be movies and genres. You must first change thei
         .Source(a => a.IncludeAll())
         .Query(a => a.MatchAll())
         )
+        
+1.1-Search Movie With Elasticsearch
+ 
+    public ActionResult Index(string q)
+        {
+
+            if (!String.IsNullOrEmpty(q))
+            {
+                try
+                {
+
+
+                    var response = ElasticsearchHelper.EsClient().Search<Movie>(s => s
+                     .Index("movies")
+                     .Type("movie")
+                     .From(0)
+                     .Size(1000)
+                     .Query(a => a.QueryString(b => b.Query(q.ToString())))
+                     );
+
+                    var datasend = (from hits in response.Hits
+                                    select hits.Source).ToList();
+
+                    ViewBag.Data = datasend;
+
+                    return View(ViewBag.Data);
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+            }
+         }
     
 2-Edit a data
 
@@ -237,6 +273,42 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
         .Source(a => a.IncludeAll())
         .Query(a => a.MatchAll())
         )
+
+ 1.1-Elasticsearch Kullanarak Arama Yapma
+ 
+    public ActionResult Index(string q)
+        {
+
+            if (!String.IsNullOrEmpty(q))
+            {
+                try
+                {
+
+
+                    var response = ElasticsearchHelper.EsClient().Search<Movie>(s => s
+                     .Index("movies")
+                     .Type("movie")
+                     .From(0)
+                     .Size(1000)
+                     .Query(a => a.QueryString(b => b.Query(q.ToString())))
+                     );
+
+                    var datasend = (from hits in response.Hits
+                                    select hits.Source).ToList();
+
+                    ViewBag.Data = datasend;
+
+                    return View(ViewBag.Data);
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+            }
+         }
 
   2-Veritabanındaki veriyi edit etme
   
