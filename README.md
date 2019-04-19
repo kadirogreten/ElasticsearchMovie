@@ -89,7 +89,9 @@ The names of the databases will be movies and genres. You must first change thei
   
 4-Movie and Genre controllers contain the standard methods of entityframework.
 
-5-Get all data
+# Elasticsearch CRUD Methods in the Controller
+
+1-Get all data
 
      var response = ElasticsearchHelper.EsClient().Search<movie>(s => s
         .Index("movies")
@@ -99,7 +101,7 @@ The names of the databases will be movies and genres. You must first change thei
         .Query(a => a.MatchAll())
         )
     
-6-Edit a data
+2-Edit a data
 
      var response = ElasticsearchHelper.EsClient().Update<Movie, Movie>
             (movie.Id, d => d
@@ -114,7 +116,7 @@ The names of the databases will be movies and genres. You must first change thei
             CreatedDate = DateTime.Now
             }));
         
-7-Insert a data
+3-Insert a data
 
     ElasticsearchHelper.EsClient().Index<Movie>
             (movie,
@@ -124,7 +126,7 @@ The names of the databases will be movies and genres. You must first change thei
                 .Refresh(Elasticsearch.Net.Refresh.True));
             
             
-8-Delete a data
+4-Delete a data
 
     var response = ElasticsearchHelper.EsClient().Delete<Movie>
             (id, d => d
@@ -223,7 +225,10 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
   
  4-Movie ve Genre controllerları içinde entityframeworkün standart metodlarını barındırıyor.
  
- 5-Veritabanındaki verinin listesini getirme
+ # Elasticsearch Veritabanında Create Update Delete (CRUD) İşlemler
+ 
+ 
+ 1-Veritabanındaki verinin listesini getirme
  
       var response = ElasticsearchHelper.EsClient().Search<movie>(s => s
         .Index("movies")
@@ -233,7 +238,7 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
         .Query(a => a.MatchAll())
         )
 
-  6-Veritabanındaki veriyi edit etme
+  2-Veritabanındaki veriyi edit etme
   
       var response = ElasticsearchHelper.EsClient().Update<Movie, Movie>
             (movie.Id, d => d
@@ -248,7 +253,7 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
             CreatedDate = DateTime.Now
             }));
         
-   7-Veritabanına veri insert etme
+   3-Veritabanına veri insert etme
    
        ElasticsearchHelper.EsClient().Index<Movie>
             (movie,
@@ -257,7 +262,7 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
                 .Id(movie.Id)
                 .Refresh(Elasticsearch.Net.Refresh.True));
             
-   8-Veritabanından veri silme
+   4-Veritabanından veri silme
    
        var response = ElasticsearchHelper.EsClient().Delete<Movie>
             (id, d => d
