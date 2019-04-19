@@ -239,7 +239,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MovieController.cs" />
-    <Compile Include="Controllers\MovieManagerController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
     <Compile Include="ElasticHelper\ElasticsearchHelper.cs" />
