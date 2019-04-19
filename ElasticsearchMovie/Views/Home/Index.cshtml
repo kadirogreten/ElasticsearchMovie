@@ -139,6 +139,47 @@
     )  
 </code></pre>
             </li>
+
+            <li>
+                Search Movie With Elasticsearch
+                <pre><code>
+    public ActionResult Index(string q)
+    {
+
+            if (!String.IsNullOrEmpty(q))
+            {
+                try
+                {
+
+
+                    var response = ElasticsearchHelper.EsClient().Search(Movie)
+                        (s => s
+                        .Index("movies")
+                        .Type("movie")
+                        .From(0)
+                        .Size(1000)
+                        .Query(a => a.QueryString(b => b.Query(q.ToString())))
+                        );
+
+                        var datasend = (from hits in response.Hits
+                        select hits.Source).ToList();
+
+                        ViewBag.Data = datasend;
+
+                        return View(ViewBag.Data);
+
+
+                }
+                catch (Exception ex)
+                {
+
+                throw;
+                }
+            }
+        }
+</code></pre>
+            </li>
+
             <li>
                 Edit a data
 
@@ -319,6 +360,47 @@
     )  
 </code></pre>
         </li>
+
+        <li>
+            Elasticsearch Kullanarak Arama Yapma
+            <pre><code>
+    public ActionResult Index(string q)
+    {
+
+    if (!String.IsNullOrEmpty(q))
+    {
+    try
+    {
+
+
+    var response = ElasticsearchHelper.EsClient().Search(Movie)
+        (s => s
+        .Index("movies")
+        .Type("movie")
+        .From(0)
+        .Size(1000)
+        .Query(a => a.QueryString(b => b.Query(q.ToString())))
+        );
+
+        var datasend = (from hits in response.Hits
+        select hits.Source).ToList();
+
+        ViewBag.Data = datasend;
+
+        return View(ViewBag.Data);
+
+
+        }
+        catch (Exception ex)
+        {
+
+        throw;
+        }
+        }
+        }
+</code></pre>
+        </li>
+
         <li>
             Veritabanındaki veriyi edit etme
 
