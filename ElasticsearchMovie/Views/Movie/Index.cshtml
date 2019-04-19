@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ElasticsearchMovie.Models.Movie>
+@using System.Data.Entity;
+@using System.Linq;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<form class="form-horizontal" method="get" action="/movie/index">
+    <input type="search" name="q" placeholder="Arama" />
+    <input type="submit" class="btn btn-default" value="Ara" />
+</form>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GenreId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in (IEnumerable<ElasticsearchMovie.Models.Movie>)ViewBag.Data)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @item.GenreId
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
