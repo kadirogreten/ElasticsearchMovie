@@ -165,7 +165,9 @@ Ekran görüntüsü bu şekilde olacaktır.
             }
             
 Gerekli migration ve web configdeki connectionstring ayarlarını düzeltmeyi unutmayınız!
-Şuan 2 tablo ile çalıştığım için 2 adet metod ile oluşmuş veritabanlarını sildirmeyi birer buttona entegre ettim. ama siz sıfırdan açacağınız için veritabanlarını silmenize gerek yok.
+
+Şuan 2 tablo ile çalıştığım için 2 adet metod ile oluşmuş veritabanlarını sildirmeyi birer buttona entegre ettim. Ama siz sıfırdan açacağınız için veritabanlarını silmenize gerek yok.
+
 Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimlerini öncelikle ElasticsearchHelper classından daha sonra da controllerlardan değiştirmelisiniz.
 
 # ElasticsearchHelper classının içinde neler var?
