@@ -2,8 +2,200 @@
     ViewBag.Title = "Home Page";
 }
 
+
+
+    <div class="jumbotron">
+        <h1>Create Asp.Net Web Project Using Elasticsearch and SqlServer</h1>
+        <p>Extending ASP.NET MVC Movie Store with elasticsearch</p>
+        <h2>How to make ASP.NET MVC Movie app using Elasticsearch and Entityframework</h2>
+        <p class="lead">You can download and install the setup file for Elasticsearch here <a target="_blank" href="http://ruilopes.com/elasticsearch-setup/ ">Elasticsearch Setup</a> </p>
+        <p>
+            After Setup.exe is installed, you can open the run command line with "Windows + R" in the Services section of Windows and type "services.msc" command.
+            After that, you can start the Elasticsearch Service with the following url and test with
+            <a target="_blank" href="http://localhost:9200/">http://localhost:9200</a>
+        </p>
+        <p>The screen image will be this way.</p>
+        <pre><code>
+    {
+    "name" : "aV0rXdK",
+    "cluster_name" : "elasticsearch",
+    "cluster_uuid" : "MVjT7pG4TNqsq-ImqgR0kA",
+    "version" : {
+    "number" : "6.3.2",
+    "build_flavor" : "oss",
+    "build_type" : "zip",
+    "build_hash" : "053779d",
+    "build_date" : "2018-07-20T05:20:23.451332Z",
+    "build_snapshot" : false,
+    "lucene_version" : "7.3.1",
+    "minimum_wire_compatibility_version" : "5.6.0",
+    "minimum_index_compatibility_version" : "5.0.0"
+    },
+    "tagline" : "You Know, for Search"
+    }
+</code></pre>
+
+        <p class="alert alert-danger">Don't forget to edit migration settings and connectionstring settings in web config!</p>
+        <p>
+            Now that I work with 2 tables,
+            I have integrated two databases with 2 methods and integrated them into a button. but you do not need to delete the databases for you to open a new one.
+        </p>
+        <form action="/movie/DeleteIndex" method="post">
+            <input type="submit" value="Film Veritabanını Sil" />
+        </form>
+        <form action="/genre/DeleteIndex" method="post">
+            <input type="submit" value="Genre Veritabanını Sil" />
+        </form>
+        <p>The names of the databases will be movies and genres. You must first change their names from the ElasticsearchHelper class and then from the controllers.</p>
+
+
+        <h3>What's in the ElasticsearchHelper class?</h3>
+        <ul>
+            <li>
+                There is a connection string in the EsClient method. The method you will always need when creating a new database.
+
+                <pre><code>
+    public static ElasticClient EsClient()
+    {
+
+
+        node = new Uri("http://localhost:9200/");
+        connSettings = new ConnectionSettings(node);
+
+        client = new ElasticClient(connSettings);
+
+        return client;
+    }
+</code></pre>
+            </li>
+            <li>
+                This method deletes the database.
+
+                <pre><code>
+    public static IDeleteIndexResponse DeleteIndex(string indexName)
+    {
+        return EsClient().DeleteIndex(indexName);
+    }
+</code></pre>
+            </li>
+            <li>
+                Database creation methods with CreateMovieIndex and CreateGenreIndex
+
+                <pre><code>
+    public static void CreateMovieIndex()
+    {
+        string indexName = "movies";
+        string aliasName = "my_movie";
+
+        var indexSettings = new IndexSettings();
+        indexSettings.NumberOfReplicas = 1;
+        indexSettings.NumberOfShards = 3;
+        var createIndexDescriptor = new CreateIndexDescriptor(indexName)
+        .Mappings(ms => ms.Map<Movie>
+            (m => m.AutoMap()))
+            .InitializeUsing(new IndexState() { Settings = indexSettings })
+            .Aliases(a => a.Alias(aliasName));
+
+            ElasticsearchHelper.EsClient().CreateIndex(createIndexDescriptor);
+        }
+</code></pre>
+
+                <pre><code>
+    public static void CreateGenreIndex()
+    {
+        string indexName = "genres";
+        string aliasName = "my_genre";
+
+        var indexSettings = new IndexSettings();
+        indexSettings.NumberOfReplicas = 1;
+        indexSettings.NumberOfShards = 3;
+        var createIndexDescriptor = new CreateIndexDescriptor(indexName)
+        .Mappings(ms => ms.Map<Genre>
+            (m => m.AutoMap()))
+            .InitializeUsing(new IndexState() { Settings = indexSettings })
+            .Aliases(a => a.Alias(aliasName));
+
+            ElasticsearchHelper.EsClient().CreateIndex(createIndexDescriptor);
+        }
+</code></pre>
+            </li>
+
+        </ul>
+
+        <h3>
+            Movie and Genre controllers contain the standard methods of entityframework.
+        </h3>
+        <p>
+            Get all data
+
+            <pre><code>
+   var response = ElasticsearchHelper.EsClient().Search(movie)(s => s
+    .Index("movies")
+    .Type("movie")
+    .From(0).Size(1000)
+    .Source(a => a.IncludeAll())
+    .Query(a => a.MatchAll())
+    )  
+</code></pre>
+
+        </p>
+
+        <p>
+            Edit a data
+
+            <pre><code>
+    var response = ElasticsearchHelper.EsClient().Update(Movie, Movie)
+        (movie.Id, d => d
+        .Index("movies")
+        .Type("movie")
+        .Doc(new Movie
+        {
+        Id = movie.Id,
+        Title = movie.Title,
+        Description = movie.Description,
+        GenreId = movie.GenreId,
+        CreatedDate = DateTime.Now
+
+        }));
+</code></pre>
+
+        </p>
+
+        <p>
+            Insert a data
+
+            <pre><code>
+    ElasticsearchHelper.EsClient().Index(Movie)
+        (movie,
+        id => id.Index("movies")
+        .Type(TypeName.From(Movie)
+            ())
+            .Id(movie.Id)
+            .Refresh(Elasticsearch.Net.Refresh.True));
+</code></pre>
+
+        </p>
+
+        <p>
+            Delete a data
+
+            <pre><code>
+    var response = ElasticsearchHelper.EsClient().Delete(Movie)
+        (id, d => d
+        .Index("movies")
+        .Type("movie"));
+</code></pre>
+
+        </p>
+
+
+    </div>
+
+
 <div class="jumbotron">
-    <h1>Elasticsearch ve Entityframework ile yapılmış Örnek Proje</h1>
+    <h1>Asp.Net MVC Projesinde Sql Server ve Elasticsearch Veritabanları Kullanılması</h1>
+    <p>ASP.NET MVC Movie Store'u elasticsearch ile genişletme</p>
+    <h2>Elasticsearch ve entityframework kullanarak ASP.NET MVC Movie uygulaması yapma</h2>
     <p class="lead">Elasticsearch ile ilgili setup dosyasını buradan indirip kurabilirsiniz <a target="_blank" href="http://ruilopes.com/elasticsearch-setup/ ">Elasticsearch Setup</a> </p>
     <p>
         setup.exe kurulduktan sonra, Windows'un servisler kısmına, "Windows+R" ile run command satırını açıp, "services.msc" komutunu yazıp ulaşabilirsiniz.
@@ -33,7 +225,7 @@
 
     <p class="alert alert-danger">Gerekli migration ve web configdeki connectionstring ayarlarını düzeltmeyi unutmayınız!</p>
     <p>
-        Şuan 2 tablo ile çalıştığım için 2 adet metod ile oluşmuş veritabanlarını sildirmeyi birer buttona entegre ettim. ama siz sıfırdan açacağınız için veritabanlarını silmenize gerek yok.
+        Şuan 2 tablo ile çalıştığım için 2 adet metod ile oluşmuş veritabanlarını sildirmeyi birer buttona entegre ettim. Ama siz sıfırdan açacağınız için veritabanlarını silmenize gerek yok.
     </p>
     <p>Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimlerini öncelikle ElasticsearchHelper classından daha sonra da controllerlardan değiştirmelisiniz.</p>
     <form action="/movie/DeleteIndex" method="post">
