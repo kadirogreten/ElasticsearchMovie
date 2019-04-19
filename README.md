@@ -5,7 +5,9 @@ Extending ASP.NET MVC Movie Store with elasticsearch
 # How to make ASP.NET MVC Movie app using Elasticsearch and Entityframework
 
 You can download and install the setup file for Elasticsearch here http://ruilopes.com/elasticsearch-setup/
+
 After Setup.exe is installed, you can open the run command line with "Windows + R" in the Services section of Windows and type "services.msc" command.
+
 After that, you can start the Elasticsearch Service with the following url and test with http://localhost:9200/
 The screen image will be this way.
 
@@ -86,6 +88,7 @@ The names of the databases will be movies and genres. You must first change thei
   
   
 4-Movie and Genre controllers contain the standard methods of entityframework.
+
 5-Get all data
 
      var response = ElasticsearchHelper.EsClient().Search(movie)(s => s
@@ -138,6 +141,7 @@ ASP.NET MVC Movie Store'u elasticsearch ile genişletme
 Elasticsearch ile ilgili setup dosyasını buradan indirip kurabilirsiniz http://ruilopes.com/elasticsearch-setup/
 
 Setup.exe kurulduktan sonra, Windows'un servisler kısmına, "Windows+R" ile run command satırını açıp, "services.msc" komutunu yazıp ulaşabilirsiniz.
+
 Bundan sonra aşağıdaki url ile Elasticsearch Servisini startlayıp ve http://localhost:9200/ ile test edebilirsiniz.
 
 Ekran görüntüsü bu şekilde olacaktır.
@@ -216,6 +220,7 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
          }
   
  4-Movie ve Genre controllerları içinde entityframeworkün standart metodlarını barındırıyor.
+ 
  5-Veritabanındaki verinin listesini getirme
  
       var response = ElasticsearchHelper.EsClient().Search(movie)(s => s
