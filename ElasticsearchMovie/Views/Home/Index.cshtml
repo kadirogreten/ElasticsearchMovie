@@ -41,10 +41,10 @@
             I have integrated two databases with 2 methods and integrated them into a button. but you do not need to delete the databases for you to open a new one.
         </p>
         <form action="/movie/DeleteIndex" method="post">
-            <input type="submit" value="Film Veritabanını Sil" />
+            <input type="submit" value="Delete Film Database" />
         </form>
         <form action="/genre/DeleteIndex" method="post">
-            <input type="submit" value="Genre Veritabanını Sil" />
+            <input type="submit" value="Delete Genre Database" />
         </form>
         <p>The names of the databases will be movies and genres. You must first change their names from the ElasticsearchHelper class and then from the controllers.</p>
 
@@ -125,10 +125,11 @@
         <h3>
             Movie and Genre controllers contain the standard methods of entityframework.
         </h3>
-        <p>
-            Get all data
+        <ul>
+            <li>
+                Get all data
 
-            <pre><code>
+                <pre><code>
    var response = ElasticsearchHelper.EsClient().Search(movie)(s => s
     .Index("movies")
     .Type("movie")
@@ -137,13 +138,11 @@
     .Query(a => a.MatchAll())
     )  
 </code></pre>
+            </li>
+            <li>
+                Edit a data
 
-        </p>
-
-        <p>
-            Edit a data
-
-            <pre><code>
+                <pre><code>
     var response = ElasticsearchHelper.EsClient().Update(Movie, Movie)
         (movie.Id, d => d
         .Index("movies")
@@ -158,13 +157,11 @@
 
         }));
 </code></pre>
+            </li>
+            <li>
+                Insert a data
 
-        </p>
-
-        <p>
-            Insert a data
-
-            <pre><code>
+                <pre><code>
     ElasticsearchHelper.EsClient().Index(Movie)
         (movie,
         id => id.Index("movies")
@@ -173,21 +170,18 @@
             .Id(movie.Id)
             .Refresh(Elasticsearch.Net.Refresh.True));
 </code></pre>
+            </li>
+            <li>
+                Delete a data
 
-        </p>
-
-        <p>
-            Delete a data
-
-            <pre><code>
+                <pre><code>
     var response = ElasticsearchHelper.EsClient().Delete(Movie)
         (id, d => d
         .Index("movies")
         .Type("movie"));
 </code></pre>
-
-        </p>
-
+            </li>
+        </ul>
 
     </div>
 
@@ -277,7 +271,7 @@
         indexSettings.NumberOfReplicas = 1;
         indexSettings.NumberOfShards = 3;
         var createIndexDescriptor = new CreateIndexDescriptor(indexName)
-        .Mappings(ms => ms.Map<Movie>
+        .Mappings(ms => ms.Map(Movie)
             (m => m.AutoMap()))
             .InitializeUsing(new IndexState() { Settings = indexSettings })
             .Aliases(a => a.Alias(aliasName));
@@ -296,7 +290,7 @@
         indexSettings.NumberOfReplicas = 1;
         indexSettings.NumberOfShards = 3;
         var createIndexDescriptor = new CreateIndexDescriptor(indexName)
-        .Mappings(ms => ms.Map<Genre>
+        .Mappings(ms => ms.Map(Genre)
             (m => m.AutoMap()))
             .InitializeUsing(new IndexState() { Settings = indexSettings })
             .Aliases(a => a.Alias(aliasName));
@@ -311,10 +305,11 @@
     <h3>
         Movie ve Genre controllerları içinde entityframeworkün standart metdolarını barındırıyor.
     </h3>
-    <p>
-        Veritabanındaki verinin listesini getirme
 
-        <pre><code>
+    <ul>
+        <li>
+            Veritabanındaki verinin listesini getirme
+            <pre><code>
    var response = ElasticsearchHelper.EsClient().Search(movie)(s => s
     .Index("movies")
     .Type("movie")
@@ -323,13 +318,11 @@
     .Query(a => a.MatchAll())
     )  
 </code></pre>
+        </li>
+        <li>
+            Veritabanındaki veriyi edit etme
 
-    </p>
-
-    <p>
-        Veritabanındaki veriyi edit etme
-
-        <pre><code>
+            <pre><code>
     var response = ElasticsearchHelper.EsClient().Update(Movie, Movie)
         (movie.Id, d => d
         .Index("movies")
@@ -344,13 +337,11 @@
 
         }));
 </code></pre>
+        </li>
+        <li>
+            Veritabanına veri insert etme
 
-    </p>
-
-    <p>
-        Veritabanına veri insert etme
-
-        <pre><code>
+            <pre><code>
     ElasticsearchHelper.EsClient().Index(Movie)
         (movie,
         id => id.Index("movies")
@@ -359,20 +350,19 @@
             .Id(movie.Id)
             .Refresh(Elasticsearch.Net.Refresh.True));
 </code></pre>
+        </li>
+        <li>
+            Veritabanından veri silme
 
-    </p>
-
-    <p>
-        Veritabanından veri silme
-
-        <pre><code>
+            <pre><code>
     var response = ElasticsearchHelper.EsClient().Delete(Movie)
         (id, d => d
         .Index("movies")
         .Type("movie"));
 </code></pre>
-
-    </p>
+        </li>
+    </ul>
+    
 
 
     <p>Aynı mantık genre içinde geçerli. Search şuan bir tek movie controllerda var bilginiz olsun.</p>
