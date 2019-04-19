@@ -91,7 +91,7 @@ The names of the databases will be movies and genres. You must first change thei
 
 5-Get all data
 
-     var response = ElasticsearchHelper.EsClient().Search(movie)(s => s
+     var response = ElasticsearchHelper.EsClient().Search<movie>(s => s
         .Index("movies")
         .Type("movie")
         .From(0).Size(1000)
@@ -101,7 +101,7 @@ The names of the databases will be movies and genres. You must first change thei
     
 6-Edit a data
 
-     var response = ElasticsearchHelper.EsClient().Update(Movie, Movie)
+     var response = ElasticsearchHelper.EsClient().Update<Movie, Movie>
             (movie.Id, d => d
             .Index("movies")
             .Type("movie")
@@ -116,17 +116,17 @@ The names of the databases will be movies and genres. You must first change thei
         
 7-Insert a data
 
-    ElasticsearchHelper.EsClient().Index(Movie)
+    ElasticsearchHelper.EsClient().Index<Movie>
             (movie,
             id => id.Index("movies")
-            .Type(TypeName.From(Movie)())
+            .Type(TypeName.From<Movie>())
                 .Id(movie.Id)
                 .Refresh(Elasticsearch.Net.Refresh.True));
             
             
 8-Delete a data
 
-    var response = ElasticsearchHelper.EsClient().Delete(Movie)
+    var response = ElasticsearchHelper.EsClient().Delete<Movie>
             (id, d => d
             .Index("movies")
             .Type("movie"));
@@ -225,7 +225,7 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
  
  5-Veritabanındaki verinin listesini getirme
  
-      var response = ElasticsearchHelper.EsClient().Search(movie)(s => s
+      var response = ElasticsearchHelper.EsClient().Search<movie>(s => s
         .Index("movies")
         .Type("movie")
         .From(0).Size(1000)
@@ -235,7 +235,7 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
 
   6-Veritabanındaki veriyi edit etme
   
-      var response = ElasticsearchHelper.EsClient().Update(Movie, Movie)
+      var response = ElasticsearchHelper.EsClient().Update<Movie, Movie>
             (movie.Id, d => d
             .Index("movies")
             .Type("movie")
@@ -250,16 +250,16 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
         
    7-Veritabanına veri insert etme
    
-       ElasticsearchHelper.EsClient().Index(Movie)
+       ElasticsearchHelper.EsClient().Index<Movie>
             (movie,
             id => id.Index("movies")
-            .Type(TypeName.From(Movie)())
+            .Type(TypeName.From<Movie>())
                 .Id(movie.Id)
                 .Refresh(Elasticsearch.Net.Refresh.True));
             
    8-Veritabanından veri silme
    
-       var response = ElasticsearchHelper.EsClient().Delete(Movie)
+       var response = ElasticsearchHelper.EsClient().Delete<Movie>
             (id, d => d
             .Index("movies")
             .Type("movie"));
