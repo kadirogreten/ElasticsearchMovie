@@ -146,37 +146,36 @@
     public ActionResult Index(string q)
     {
 
-            if (!String.IsNullOrEmpty(q))
-            {
-                try
-                {
+    if (!String.IsNullOrEmpty(q))
+    {
+    try
+    {
 
 
-                    var response = ElasticsearchHelper.EsClient().Search(Movie)
-                        (s => s
-                        .Index("movies")
-                        .Type("movie")
-                        .From(0)
-                        .Size(1000)
-                        .Query(a => a.QueryString(b => b.Query(q.ToString())))
-                        );
+    var response = ElasticsearchHelper.EsClient().Search(Movie)
+    (s => s
+    .Index("movies")
+    .Type("movie")
+    .Query(a => a.Term(t => t.Id, 4))
+    .Query(a => a.MatchPhrasePrefix(mq => mq.Field(f => f.Title).Query(q)))
+    );
 
-                        var datasend = (from hits in response.Hits
-                        select hits.Source).ToList();
+    var datasend = (from hits in response.Hits
+    select hits.Source).ToList();
 
-                        ViewBag.Data = datasend;
+    ViewBag.Data = datasend;
 
-                        return View(ViewBag.Data);
+    return View(ViewBag.Data);
 
 
-                }
-                catch (Exception ex)
-                {
+    }
+    catch (Exception ex)
+    {
 
-                throw;
-                }
-            }
-        }
+    throw;
+    }
+    }
+    }
 </code></pre>
             </li>
 
@@ -374,30 +373,29 @@
 
 
     var response = ElasticsearchHelper.EsClient().Search(Movie)
-        (s => s
-        .Index("movies")
-        .Type("movie")
-        .From(0)
-        .Size(1000)
-        .Query(a => a.QueryString(b => b.Query(q.ToString())))
-        );
+    (s => s
+    .Index("movies")
+    .Type("movie")
+    .Query(a => a.Term(t => t.Id, 4))
+    .Query(a => a.MatchPhrasePrefix(mq => mq.Field(f => f.Title).Query(q)))
+    );
 
-        var datasend = (from hits in response.Hits
-        select hits.Source).ToList();
+    var datasend = (from hits in response.Hits
+    select hits.Source).ToList();
 
-        ViewBag.Data = datasend;
+    ViewBag.Data = datasend;
 
-        return View(ViewBag.Data);
+    return View(ViewBag.Data);
 
 
-        }
-        catch (Exception ex)
-        {
+    }
+    catch (Exception ex)
+    {
 
-        throw;
-        }
-        }
-        }
+    throw;
+    }
+    }
+    }
 </code></pre>
         </li>
 

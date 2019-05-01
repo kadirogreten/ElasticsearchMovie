@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ElasticsearchMovie.ElasticHelper;
@@ -16,7 +18,7 @@ namespace ElasticsearchMovie.Controllers
     public class MovieController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-   
+
 
 
 
@@ -28,9 +30,17 @@ namespace ElasticsearchMovie.Controllers
             }
         }
 
+
+
+
+
+
         // GET: Movie
         public ActionResult Index(string q)
         {
+
+
+
 
             if (!String.IsNullOrEmpty(q))
             {
@@ -38,18 +48,20 @@ namespace ElasticsearchMovie.Controllers
                 {
 
 
-                    var response = ElasticsearchHelper.EsClient().Search<Movie>(s => s
-                     .Index("movies")
-                     .Type("movie")
-                     .From(0)
-                     .Size(1000)
-                     .Query(a => a.QueryString(b => b.Query(q.ToString())))
-                     );
+                    var response = ElasticsearchHelper.EsClient().Search<Movie>(p => p
+                                     .Index("movies")
+                                     .Type("movie")
+                                    .Query(a => a.Term(t => t.Description, q))
+                                    .Query(a => a.MatchPhrasePrefix(mq => mq.Field(f => f.Title).Query(q)))                                   
+                                    );
+
+                    
 
                     var datasend = (from hits in response.Hits
                                     select hits.Source).ToList();
 
                     ViewBag.Data = datasend;
+
 
                     return View(ViewBag.Data);
 
@@ -97,7 +109,7 @@ namespace ElasticsearchMovie.Controllers
 
 
         }
-        
+
         public ActionResult DeleteIndex()
         {
             ElasticsearchHelper.DeleteIndex("movies");

@@ -6,6 +6,9 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @*@Scripts.Render("~/bundles/autocomplete")*@
+
+   
 
 </head>
 <body>
@@ -25,7 +28,8 @@
                     <li>@Html.ActionLink("Movies", "index", "movie")</li>
                     <li>@Html.ActionLink("Genres", "index", "genre")</li>
 
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin")) {
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
                         <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
                         <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
                     }
