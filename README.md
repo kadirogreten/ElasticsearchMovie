@@ -112,13 +112,12 @@ The names of the databases will be movies and genres. You must first change thei
                 {
 
 
-                    var response = ElasticsearchHelper.EsClient().Search<Movie>(s => s
-                     .Index("movies")
-                     .Type("movie")
-                     .From(0)
-                     .Size(1000)
-                     .Query(a => a.QueryString(b => b.Query(q.ToString())))
-                     );
+                     var response = ElasticsearchHelper.EsClient().Search<Movie>(p => p
+                                     .Index("movies")
+                                     .Type("movie")
+                                    .Query(a => a.Term(t => t.Description, q))
+                                    .Query(a => a.MatchPhrasePrefix(mq => mq.Field(f => f.Title).Query(q)))                                   
+                                    );
 
                     var datasend = (from hits in response.Hits
                                     select hits.Source).ToList();
@@ -285,13 +284,12 @@ Oluşacak veritabanlarının isimleri movies ve genres olacak. Bunların isimler
                 {
 
 
-                    var response = ElasticsearchHelper.EsClient().Search<Movie>(s => s
-                     .Index("movies")
-                     .Type("movie")
-                     .From(0)
-                     .Size(1000)
-                     .Query(a => a.QueryString(b => b.Query(q.ToString())))
-                     );
+                    var response = ElasticsearchHelper.EsClient().Search<Movie>(p => p
+                                     .Index("movies")
+                                     .Type("movie")
+                                    .Query(a => a.Term(t => t.Description, q))
+                                    .Query(a => a.MatchPhrasePrefix(mq => mq.Field(f => f.Title).Query(q)))                                   
+                                    );
 
                     var datasend = (from hits in response.Hits
                                     select hits.Source).ToList();
